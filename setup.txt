@@ -57,3 +57,9 @@ nameserver 8.8.8.8
 nameserver 8.8.4.4
 search university.ds.derby.ac.uk
 EOF
+
+# SSH
+## COPY keys from vault into ~/.SSH
+chmod 700 ~/.ssh
+chmod 644 ~/.ssh/id_rsa.pub
+chmod 600 ~/.ssh/id_rsa
