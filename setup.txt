@@ -41,6 +41,7 @@ sudo apt-get update && sudo apt-get install packer
 sudo apt install -y ansible
 
 # WSL2 AnyConnect Fix
+#https://jamespotz.github.io/blog/how-to-fix-wsl2-and-cisco-vpn
 sudo unlink /etc/resolv.conf # this will unlink the default wsl2 resolv.conf
 
 # This config will prevent wsl2 from overwritting the resolve.conf file everytime
