@@ -1,3 +1,10 @@
+# Extra repositories
+echo "deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_20.04/ /" |
+sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
+
+curl -L "https://download.opensuse.org/repositories/devel:/kubic:\
+/libcontainers:/stable/xUbuntu_20.04/Release.key" | sudo apt-key add -
+
 sudo apt-get update -y
 sudo apt upgrade -y
 
@@ -42,6 +49,7 @@ sudo apt-get update && sudo apt-get install packer
 
 # ansible
 sudo apt install -y ansible
+
 
 # WSL2 AnyConnect Fix
 #https://jamespotz.github.io/blog/how-to-fix-wsl2-and-cisco-vpn
