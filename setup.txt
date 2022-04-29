@@ -19,7 +19,7 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$
 
 # kubectl
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-echo "alias k='kubectl'" >>~/zshrc
+echo "alias k='kubectl'" >>~/.zshrc
 
 # azure-cli
 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
