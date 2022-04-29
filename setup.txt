@@ -48,8 +48,10 @@ sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(l
 sudo apt-get update && sudo apt-get install packer
 
 # ansible
-sudo apt install -y ansible
+sudo apt install ansible -y
 
+# podman
+sudo apt install podman -y
 
 # WSL2 AnyConnect Fix
 #https://jamespotz.github.io/blog/how-to-fix-wsl2-and-cisco-vpn
