@@ -71,6 +71,11 @@ sudo apt install ansible -y
 # podman
 sudo apt install podman -y
 
+# tfsec
+wget https://github.com/aquasecurity/tfsec/releases/download/v1.21.2/tfsec-checkgen-linux-amd64
+sudo mv tfsec-checkgen-linux-amd64 /usr/local/bin/tfsec
+sudo chmod +x /usr/local/bin/tfsec
+
 # WSL2 AnyConnect Fix
 #https://jamespotz.github.io/blog/how-to-fix-wsl2-and-cisco-vpn
 sudo unlink /etc/resolv.conf # this will unlink the default wsl2 resolv.conf
