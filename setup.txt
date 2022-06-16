@@ -80,6 +80,9 @@ chmod 700 get_helm.sh
 ./get_helm.sh
 rm get_helm.sh
 
+# Helm repositories
+helm repo add rancher-latest https://releases.rancher.com/server-charts/latest
+
 # tfsec
 wget https://github.com/aquasecurity/tfsec/releases/download/v1.21.2/tfsec-linux-amd64
 sudo mv tfsec-checkgen-linux-amd64 /usr/local/bin/tfsec
