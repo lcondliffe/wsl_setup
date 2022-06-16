@@ -74,6 +74,12 @@ sudo apt install python3-pip -y
 # podman
 sudo apt install podman -y
 
+# Helm
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
+rm get_helm.sh
+
 # tfsec
 wget https://github.com/aquasecurity/tfsec/releases/download/v1.21.2/tfsec-linux-amd64
 sudo mv tfsec-checkgen-linux-amd64 /usr/local/bin/tfsec
