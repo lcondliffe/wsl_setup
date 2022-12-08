@@ -72,6 +72,10 @@ sudo apt-get update && sudo apt-get install packer
 # ansible
 sudo apt install ansible -y
 
+#ansible-lint
+pip3 install "ansible-lint"
+echo 'export PATH="$HOME/.local/bin:$PATH"' >>~/.zshrc
+
 # python-pip
 sudo apt install python3-pip -y
 
