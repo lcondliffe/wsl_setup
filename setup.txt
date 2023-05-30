@@ -54,6 +54,7 @@ sudo apt install unzip -y
 #batcat - https://github.com/sharkdp/bat
 sudo apt install bat -y
 echo "alias bat='batcat'" >>~/.zshrc
+export BAT_PAGER=most
 
 # vault
 curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
