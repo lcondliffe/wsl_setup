@@ -51,6 +51,10 @@ az devops configure --defaults organization=https://dev.azure.com/universityofde
 # unzip
 sudo apt install unzip -y
 
+#batcat - https://github.com/sharkdp/bat
+sudo apt install bat -y
+echo "alias bat='batcat'" >>~/.zshrc
+
 # vault
 curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
 sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
