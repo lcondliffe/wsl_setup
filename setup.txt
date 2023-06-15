@@ -84,6 +84,9 @@ echo 'export PATH="$HOME/.local/bin:$PATH"' >>~/.zshrc
 # python-pip
 sudo apt install python3-pip -y
 
+# Molecule - ansible tests
+pip install "molecule[lint]"
+
 # podman
 sudo apt install podman -y
 
