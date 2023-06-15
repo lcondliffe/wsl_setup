@@ -84,6 +84,9 @@ echo 'export PATH="$HOME/.local/bin:$PATH"' >>~/.zshrc
 # python-pip
 sudo apt install python3-pip -y
 
+# python virtual env
+apt install python3.10-venv -y
+
 # Molecule - ansible tests
 pip install "molecule[lint]"
 
