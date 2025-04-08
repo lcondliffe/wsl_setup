@@ -1,0 +1,60 @@
+---
+- hosts: localhost
+  gather_facts: false
+  connection: local
+
+  tasks:
+  - name: apt packages
+    apt:
+      update_cache: true
+      pkg:
+        - zsh
+        - pipx
+        - unzip
+        - python3
+        - azure-cli
+        - gpg
+        - ffmpeg
+        - xsel
+        - traceroute
+        - podman
+        - buildah
+    become: true
+
+  - name: pip packages
+    pip:
+      name:
+        - ansible-dev-tools
+        - jmespath
+        - yamllint
+
+  - name: az cli extension - azure devops
+    command:
+      cmd: |
+        az extension add --name azure-devops
+  
+  - name: infracost
+    shell: |
+      curl -fsSL https://raw.githubusercontent.com/infracost/infracost/master/scripts/install.sh | sh
+
+  - name: Ensure .zshrc contains a managed block for custom aliases
+    blockinfile:
+      path: ~/.zshrc
+      block: |
+        alias ap="ansible-playbook"
+        alias gst="git status"
+        alias gd="git --no-pager diff"
+        alias gp="git push"
+        alias gpl="git pull"
+        alias gl="git log"
+        alias commit="git add . && git commit -m"
+        alias ll="ls -al"
+        alias cls="clear"
+        alias fabric-update="cp -a ~/.config/custom-fabric-patterns/* ~/.config/fabric/patterns/"
+        alias tfmt="terraform fmt -recursive"
+        alias pbpaste="powershell.exe Get-Clipboard | sed 's/\r$//' | sed -z '$ s/\n$//'"
+        alias pbcopy="tee <&0 | clip.exe"
+        alias passgen="tr -dc 'A-Za-z0-9' </dev/urandom | head -c 16 ; echo"
+        alias git-delete-branches="git branch | grep -v "main" | xargs git branch -D"
+        alias cat-all='for file in *; do echo -e "\n=== $file ===\n"; cat "$file"; done'
+      marker: "# {mark} ANSIBLE MANAGED BLOCK: Custom Aliases"
