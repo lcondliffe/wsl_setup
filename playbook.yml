@@ -19,6 +19,9 @@
         - traceroute
         - podman
         - buildah
+        - azure-functions-core-tools
+        - dotnet-sdk-8.0
+        - dotnet-runtime-8.0
     become: true
 
   - name: pip packages
@@ -28,10 +31,10 @@
         - jmespath
         - yamllint
 
-  - name: az cli extension - azure devops
-    command:
-      cmd: |
-        az extension add --name azure-devops
+  #- name: az cli extension - azure devops
+  #  command:
+  #    cmd: |
+  #      az extension add --name azure-devops
   
   - name: infracost
     shell: |
@@ -47,7 +50,7 @@
         alias gp="git push"
         alias gpl="git pull"
         alias gl="git log"
-        alias commit="git add . && git commit -m"
+        alias commit="git add . && git commit --no-verify -m"
         alias ll="ls -al"
         alias cls="clear"
         alias fabric-update="cp -a ~/.config/custom-fabric-patterns/* ~/.config/fabric/patterns/"
@@ -57,4 +60,5 @@
         alias passgen="tr -dc 'A-Za-z0-9' </dev/urandom | head -c 16 ; echo"
         alias git-delete-branches="git branch | grep -v "main" | xargs git branch -D"
         alias cat-all='for file in *; do echo -e "\n=== $file ===\n"; cat "$file"; done'
+        alias pc='pre-commit run --all-files'
       marker: "# {mark} ANSIBLE MANAGED BLOCK: Custom Aliases"
