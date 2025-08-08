@@ -35,6 +35,29 @@
       - "{{ ansible_env.HOME }}/scripts"
       - "{{ ansible_env.HOME }}/temp"
 
+    # apt packages to install (can be overridden via -e or group_vars)
+    apt_packages:
+      - zsh
+      - pipx
+      - unzip
+      - python3
+      - python3-jmespath
+      - python3-venv
+      - yamllint
+      - pre-commit
+      - curl
+      - gpg
+      - ffmpeg
+      - xsel
+      - traceroute
+      - podman
+      - buildah
+      # Requires Microsoft repos:
+      - azure-cli
+      - azure-functions-core-tools
+      - dotnet-sdk-8.0
+      - dotnet-runtime-8.0
+
   tasks:
     - name: Ensure base directories exist in HOME
       ansible.builtin.file:
@@ -52,33 +75,18 @@
       ansible.builtin.include_tasks: tasks/apt_repos.yml
       tags: [apt]
 
-    - name: apt packages
+    - name: Update apt cache
       become: true
       ansible.builtin.apt:
         update_cache: true
+      tags: [apt]
+
+    - name: Install apt packages
+      become: true
+      ansible.builtin.apt:
+        name: "{{ item }}"
         state: present
-        pkg:
-          - zsh
-          - pipx
-          - unzip
-          - python3
-          - python3-jmespath
-          - python3-venv
-          - pipx
-          - yamllint
-          - pre-commit
-          - curl
-          - gpg
-          - ffmpeg
-          - xsel
-          - traceroute
-          - podman
-          - buildah
-          # Requires Microsoft repos:
-          - azure-cli
-          - azure-functions-core-tools
-          - dotnet-sdk-8.0
-          - dotnet-runtime-8.0
+      loop: "{{ apt_packages }}"
       tags: [apt]
 
     - name: Install infracost (bootstrap-only)
