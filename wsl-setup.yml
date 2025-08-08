@@ -1,0 +1,196 @@
+---
+- name: WSL Ubuntu setup
+  hosts: localhost
+  connection: local
+  gather_facts: true
+
+  vars:
+    # Flip this via: -e run_bootstrap_scripts=true
+    run_bootstrap_scripts: false
+    ansible_python_interpreter: /usr/bin/python3
+
+    # Change this to update Terraform, then re-run with: ansible-playbook -K wsl-setup.yml -t terraform
+    terraform_version: "1.9.5"
+    terraform_os: "linux"
+    terraform_arch_map:
+      x86_64: amd64
+      aarch64: arm64
+      arm64: arm64
+      armv7l: arm
+    terraform_tmp_dir: "/tmp/terraform-{{ terraform_version }}"
+
+    # home directory structure
+    directories:
+      - "{{ ansible_env.HOME }}/ansible"
+      - "{{ ansible_env.HOME }}/ansible/playbooks"
+      - "{{ ansible_env.HOME }}/ansible/roles"
+      - "{{ ansible_env.HOME }}/repo"
+      - "{{ ansible_env.HOME }}/repo/private"
+      - "{{ ansible_env.HOME }}/repo/public"
+      - "{{ ansible_env.HOME }}/repo/training"
+      - "{{ ansible_env.HOME }}/scripts"
+      - "{{ ansible_env.HOME }}/temp"
+
+  tasks:
+    - name: Ensure base directories exist in HOME
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: "0755"
+      loop: "{{ directories }}"
+      tags: [dirs]
+
+    - name: apt repositories
+      ansible.builtin.include_tasks: tasks/apt_repos.yml
+      tags: [apt]
+
+    - name: apt packages
+      become: true
+      ansible.builtin.apt:
+        update_cache: true
+        state: present
+        pkg:
+          - zsh
+          - pipx
+          - unzip
+          - python3
+          - python3-jmespath
+          - python3-venv
+          - pipx
+          - yamllint
+          - curl
+          - gpg
+          - ffmpeg
+          - xsel
+          - traceroute
+          - podman
+          - buildah
+          # Requires Microsoft repos:
+          - azure-cli
+          - azure-functions-core-tools
+          - dotnet-sdk-8.0
+          - dotnet-runtime-8.0
+      tags: [apt]
+
+    - name: Install infracost (bootstrap-only)
+      ansible.builtin.shell: |
+        curl -fsSL https://raw.githubusercontent.com/infracost/infracost/master/scripts/install.sh | sh
+      args:
+        executable: /bin/bash
+      changed_when: false
+      register: infracost_check
+      failed_when: infracost_check.rc not in [0]
+      when: run_bootstrap_scripts | bool
+      tags: [bootstrap, infracost, scripts]
+
+    - name: Ensure /etc/shells includes zsh
+      become: true
+      ansible.builtin.lineinfile:
+        path: /etc/shells
+        line: /usr/bin/zsh
+        state: present
+        create: no
+      tags: [zsh, shell]
+
+    - name: Set zsh as default shell for current user
+      become: true
+      ansible.builtin.user:
+        name: "{{ ansible_user_id }}"
+        shell: /usr/bin/zsh
+      tags: [zsh, shell]
+
+    - name: Ensure .zshrc contains a managed block for custom aliases
+      ansible.builtin.blockinfile:
+        path: "{{ ansible_env.HOME }}/.zshrc"
+        create: true
+        marker: "# {mark} ANSIBLE MANAGED BLOCK: Custom Aliases"
+        block: |
+          alias ap="ansible-playbook"
+          alias gst="git status"
+          alias gd="git --no-pager diff"
+          alias gp="git push"
+          alias gpl="git pull"
+          alias gl="git log"
+          alias commit="git add . && git commit --no-verify -m"
+          alias ll="ls -al"
+          alias cls="clear"
+          alias fabric-update="cp -a ~/.config/custom-fabric-patterns/* ~/.config/fabric/patterns/"
+          alias tfmt="terraform fmt -recursive"
+          alias pbpaste="powershell.exe Get-Clipboard | sed 's/\r$//' | sed -z '$ s/\n$//'"
+          alias pbcopy="tee <&0 | clip.exe"
+          alias passgen="tr -dc 'A-Za-z0-9' </dev/urandom | head -c 16 ; echo"
+          alias git-delete-branches='git branch | grep -v "main" | xargs git branch -D'
+          alias cat-all='for file in *; do echo -e "\n=== $file ===\n"; cat "$file"; done'
+          alias pc='pre-commit run --all-files'
+      tags: [aliases, shell]
+
+    # -------------------------
+    # Terraform (binary install)
+    # -------------------------
+    - name: Determine terraform arch
+      ansible.builtin.set_fact:
+        terraform_arch: "{{ terraform_arch_map.get(ansible_architecture, 'amd64') }}"
+      tags: [terraform]
+
+    - name: Create temp dir for terraform
+      ansible.builtin.file:
+        path: "{{ terraform_tmp_dir }}"
+        state: directory
+        mode: '0755'
+      tags: [terraform]
+
+    - name: Download Terraform zip
+      ansible.builtin.get_url:
+        url: "https://releases.hashicorp.com/terraform/{{ terraform_version }}/terraform_{{ terraform_version }}_{{ terraform_os }}_{{ terraform_arch }}.zip"
+        dest: "{{ terraform_tmp_dir }}/terraform_{{ terraform_version }}_{{ terraform_os }}_{{ terraform_arch }}.zip"
+        mode: '0644'
+      tags: [terraform]
+
+    - name: Download Terraform SHA256SUMS
+      ansible.builtin.get_url:
+        url: "https://releases.hashicorp.com/terraform/{{ terraform_version }}/terraform_{{ terraform_version }}_SHA256SUMS"
+        dest: "{{ terraform_tmp_dir }}/SHA256SUMS"
+        mode: '0644'
+      tags: [terraform]
+
+    - name: Verify Terraform checksum
+      ansible.builtin.shell: |
+        set -euo pipefail
+        cd "{{ terraform_tmp_dir }}"
+        grep "terraform_{{ terraform_version }}_{{ terraform_os }}_{{ terraform_arch }}.zip" SHA256SUMS | sha256sum -c -
+      args:
+        executable: /bin/bash
+      tags: [terraform]
+
+    - name: Unzip Terraform
+      ansible.builtin.unarchive:
+        src: "{{ terraform_tmp_dir }}/terraform_{{ terraform_version }}_{{ terraform_os }}_{{ terraform_arch }}.zip"
+        dest: "{{ terraform_tmp_dir }}"
+        remote_src: true
+      tags: [terraform]
+
+    - name: Install Terraform to /usr/local/bin
+      become: true
+      ansible.builtin.copy:
+        src: "{{ terraform_tmp_dir }}/terraform"
+        dest: /usr/local/bin/terraform
+        owner: root
+        group: root
+        mode: '0755'
+      tags: [terraform]
+
+    - name: Clean up Terraform temp
+      ansible.builtin.file:
+        path: "{{ terraform_tmp_dir }}"
+        state: absent
+      tags: [terraform]
+
+    - name: Show Terraform version
+      ansible.builtin.command: terraform version
+      register: tf_version
+      changed_when: false
+      tags: [terraform]
+
+    - ansible.builtin.debug:
+        msg: "{{ tf_version.stdout_lines | default([]) }}"
+      tags: [terraform]

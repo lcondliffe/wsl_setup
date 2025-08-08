@@ -1,0 +1,47 @@
+- name: Ensure keyring directory exists
+  become: true
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+  tags: [ms, repos]
+
+  ## Microsoft Repositories ##
+
+- name: Download Microsoft signing key (ASCII)
+  become: true
+  ansible.builtin.get_url:
+    url: https://packages.microsoft.com/keys/microsoft.asc
+    dest: /usr/share/keyrings/microsoft.asc
+    mode: '0644'
+  tags: [ms, repos]
+
+- name: Install Microsoft keyring (dearmored)
+  become: true
+  ansible.builtin.command:
+    cmd: gpg --dearmor -o /etc/apt/keyrings/microsoft.gpg /usr/share/keyrings/microsoft.asc
+  args:
+    creates: /etc/apt/keyrings/microsoft.gpg
+  tags: [ms, repos]
+
+- name: Add Azure CLI apt repo
+  become: true
+  ansible.builtin.apt_repository:
+    repo: "deb [arch=amd64,arm64 signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/azure-cli/ {{ ansible_distribution_release }} main"
+    filename: azure-cli
+    state: present
+  tags: [ms, repos]
+
+- name: Add Microsoft prod repo (dotnet + Functions)
+  become: true
+  ansible.builtin.apt_repository:
+    repo: "deb [arch=amd64,arm64 signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/ubuntu/{{ ansible_distribution_version }}/prod {{ ansible_distribution_release }} main"
+    filename: microsoft-prod
+    state: present
+  tags: [ms, repos]
+
+- name: apt update after adding Microsoft repos
+  become: true
+  ansible.builtin.apt:
+    update_cache: true
+  tags: [ms, repos]
