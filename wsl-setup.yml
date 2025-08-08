@@ -58,6 +58,7 @@
           - python3-venv
           - pipx
           - yamllint
+          - pre-commit
           - curl
           - gpg
           - ffmpeg
