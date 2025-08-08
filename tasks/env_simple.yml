@@ -1,0 +1,14 @@
+- name: Write system-wide exported environment variables
+  become: true
+  ansible.builtin.copy:
+    dest: /etc/profile.d/99-custom-env.sh
+    owner: root
+    group: root
+    mode: "0644"
+    content: |
+      #!/bin/sh
+      # Managed by Ansible: system-wide environment variables
+      {% for k, v in env_vars.items() %}
+      export {{ k }}="{{ v }}"
+      {% endfor %}
+  tags: [env]

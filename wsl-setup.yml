@@ -9,6 +9,10 @@
     run_bootstrap_scripts: false
     ansible_python_interpreter: /usr/bin/python3
 
+    # WSL System Environment Variables:
+    env_vars:
+      SKIP: "terraform_checkov,end-of-file-fixer"
+
     # Change this to update Terraform, then re-run with: ansible-playbook -K wsl-setup.yml -t terraform
     terraform_version: "1.9.5"
     terraform_os: "linux"
@@ -39,6 +43,10 @@
         mode: "0755"
       loop: "{{ directories }}"
       tags: [dirs]
+
+    - name: Export environment variables system-wide
+      ansible.builtin.include_tasks: tasks/env_simple.yml
+      tags: [env]
 
     - name: apt repositories
       ansible.builtin.include_tasks: tasks/apt_repos.yml
@@ -124,8 +132,6 @@
           alias cat-all='for file in *; do echo -e "\n=== $file ===\n"; cat "$file"; done'
           alias pc='pre-commit run --all-files'
       tags: [aliases, shell]
-
-    # -------------------------
     # Terraform (binary install)
     # -------------------------
     - name: Terraform setup
