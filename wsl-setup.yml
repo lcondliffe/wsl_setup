@@ -54,9 +54,6 @@
       - buildah
       # Requires Microsoft repos:
       - azure-cli
-      - azure-functions-core-tools
-      - dotnet-sdk-8.0
-      - dotnet-runtime-8.0
 
   tasks:
     - name: Ensure base directories exist in HOME
@@ -84,9 +81,8 @@
     - name: Install apt packages
       become: true
       ansible.builtin.apt:
-        name: "{{ item }}"
+        name: "{{ apt_packages }}"
         state: present
-      loop: "{{ apt_packages }}"
       tags: [apt]
 
     - name: Install infracost (bootstrap-only)
