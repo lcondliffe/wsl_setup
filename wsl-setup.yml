@@ -85,15 +85,8 @@
         state: present
       tags: [apt]
 
-    - name: Install infracost (bootstrap-only)
-      ansible.builtin.shell: |
-        curl -fsSL https://raw.githubusercontent.com/infracost/infracost/master/scripts/install.sh | sh
-      args:
-        executable: /bin/bash
-      changed_when: false
-      register: infracost_check
-      failed_when: infracost_check.rc not in [0]
-      when: run_bootstrap_scripts | bool
+    - name: Infracost setup
+      ansible.builtin.include_tasks: tasks/infracost.yml
       tags: [bootstrap, infracost, scripts]
 
     - name: Ensure /etc/shells includes zsh
