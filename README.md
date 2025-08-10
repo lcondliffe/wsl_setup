@@ -16,14 +16,19 @@ Reproducible setup for a WSL (Ubuntu). The goal is to keep the machine as close 
 
 Validate the playbook locally in a container:
 
+```bash
+# Ubuntu 22.04
+podman run --rm -v "$(pwd)":/work:Z -w /work docker.io/library/ubuntu:22.04 \
+  bash -lc './bootstrap_wsl.sh'
+
+# Ubuntu 24.04
+podman run --rm -v "$(pwd)":/work:Z -w /work docker.io/library/ubuntu:24.04 \
+  bash -lc './bootstrap_wsl.sh'
+
+# Pin a specific Ansible version
+ANSIBLE_VERSION=9.5.1 podman run --rm -v "$(pwd)":/work:Z -w /work \
+  docker.io/library/ubuntu:22.04 \
+  bash -lc 'ANSIBLE_VERSION="$ANSIBLE_VERSION" ./bootstrap_wsl.sh'
 ```
-# Run playbook in ephemeral Ubuntu container
-podman run --rm -v "$(pwd)":/work:Z -w /work docker.io/library/ubuntu:22.04 bash -lc '
-  set -euo pipefail
-  export DEBIAN_FRONTEND=noninteractive
-  apt-get update
-  apt-get install -y --no-install-recommends sudo python3 python3-apt python3-pip curl gpg unzip ca-certificates gnupg
-  python3 -m pip install --no-cache-dir ansible
-  ansible-playbook -vv wsl-setup.yml
-'
-```
+
+Note on root vs non-root: The official Ubuntu container runs as root by default, so the bootstrap script can install packages without sudo. If you override the user (e.g., with `--user $(id -u):$(id -g)`), you'll need sudo inside the container or to adapt the script accordingly.
