@@ -7,4 +7,4 @@
   register: infracost_check
   failed_when: infracost_check.rc not in [0]
   when: run_bootstrap_scripts | bool
-  tags: [bootstrap, infracost, scripts]
+  tags: [infracost, scripts]

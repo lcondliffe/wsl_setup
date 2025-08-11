@@ -40,8 +40,14 @@
       - bat # https://github.com/sharkdp/bat
       - buildah
       - curl
-      - fzf
+      - dnsutils
+      - eza # https://github.com/eza-community/eza
+      - fzf # https://github.com/junegunn/fzf
+      - git-delta # https://github.com/dandavison/delta
       - gpg
+      - httpie # https://httpie.io/cli
+      - jq
+      - ncdu # https://github.com/rofl0r/ncdu
       - podman
       - pre-commit
       - pipx
@@ -127,16 +133,16 @@
 
     - name: Terraform
       ansible.builtin.include_tasks: tasks/terraform.yml
-      tags: [terraform, scripts, bootstrap]
+      tags: [terraform, scripts]
 
     - name: Infracost
       ansible.builtin.include_tasks: tasks/infracost.yml
-      tags: [infracost, scripts, bootstrap]
+      tags: [infracost, scripts]
 
     - name: Kubectl
       ansible.builtin.include_tasks: tasks/kubectl.yml
-      tags: [kubectl, scripts, bootstrap]
+      tags: [kubectl, scripts]
 
     - name: Helm
       ansible.builtin.include_tasks: tasks/helm.yml
-      tags: [helm, scripts, bootstrap]
+      tags: [helm, scripts]
