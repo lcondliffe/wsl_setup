@@ -2,7 +2,15 @@
 
 Reproducible setup for a WSL (Ubuntu). The goal is to keep the machine as close to ephemeral as possible so rebuilds or distro upgrades are fast: re-run the playbook and you’re back in a working state.
 
-## Usage 
+## Usage
+
+First run which includes Ansible / Pre-Reqs:
+
+```bash
+chmod +x ./bootstrap_wsl.sh`
+
+./bootstrap_wsl.sh
+```
 
 `ansible-playbook -K wsl-setup.yml`
 

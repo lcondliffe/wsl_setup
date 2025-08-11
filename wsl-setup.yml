@@ -37,9 +37,9 @@
     # apt packages to install (can be overridden via -e or group_vars)
     apt_packages:
       - azure-cli # (requires Microsoft repo)
+      - bat # https://github.com/sharkdp/bat
       - buildah
       - curl
-      - ffmpeg
       - fzf
       - gpg
       - podman
