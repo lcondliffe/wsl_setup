@@ -35,7 +35,7 @@
       - "{{ ansible_env.HOME }}/temp"
 
     # apt packages to install (can be overridden via -e or group_vars)
-  apt_packages:
+    apt_packages:
       - azure-cli # (requires Microsoft repo)
       - buildah
       - curl
