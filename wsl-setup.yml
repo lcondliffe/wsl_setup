@@ -35,24 +35,24 @@
       - "{{ ansible_env.HOME }}/temp"
 
     # apt packages to install (can be overridden via -e or group_vars)
-    apt_packages:
-      - zsh
+  apt_packages:
+      - azure-cli # (requires Microsoft repo)
+      - buildah
+      - curl
+      - ffmpeg
+      - fzf
+      - gpg
+      - podman
+      - pre-commit
       - pipx
-      - unzip
       - python3
       - python3-jmespath
       - python3-venv
-      - yamllint
-      - pre-commit
-      - curl
-      - gpg
-      - ffmpeg
-      - xsel
       - traceroute
-      - podman
-      - buildah
-      # Requires Microsoft repos:
-      - azure-cli
+      - unzip
+      - xsel
+      - yamllint
+      - zsh
 
   tasks:
     - name: Ensure base directories exist in HOME
