@@ -85,10 +85,6 @@
         state: present
       tags: [apt]
 
-    - name: Infracost setup
-      ansible.builtin.include_tasks: tasks/infracost.yml
-      tags: [bootstrap, infracost, scripts]
-
     - name: Ensure /etc/shells includes zsh
       become: true
       ansible.builtin.lineinfile:
@@ -129,8 +125,15 @@
           alias cat-all='for file in *; do echo -e "\n=== $file ===\n"; cat "$file"; done'
           alias pc='pre-commit run --all-files'
       tags: [aliases, shell]
-    # Terraform (binary install)
-    # -------------------------
-    - name: Terraform setup
+
+    - name: Terraform
       ansible.builtin.include_tasks: tasks/terraform.yml
-      tags: [terraform]
+      tags: [terraform, scripts, bootstrap]
+
+    - name: Infracost
+      ansible.builtin.include_tasks: tasks/infracost.yml
+      tags: [infracost, scripts, bootstrap]
+
+    - name: Kubectl
+      ansible.builtin.include_tasks: tasks/kubectl.yml
+      tags: [kubectl, scripts, bootstrap]

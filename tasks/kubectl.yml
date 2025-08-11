@@ -1,0 +1,27 @@
+- name: Fetch latest stable kubectl version
+  ansible.builtin.uri:
+    url: https://dl.k8s.io/release/stable.txt
+    return_content: true
+  register: kubectl_stable
+  tags: [kubectl]
+
+- name: Install kubectl to /usr/local/bin (latest stable, amd64)
+  become: true
+  ansible.builtin.get_url:
+    url: "https://dl.k8s.io/release/{{ kubectl_stable.content | trim }}/bin/linux/amd64/kubectl"
+    dest: /usr/local/bin/kubectl
+    mode: '0755'
+    force: true
+  tags: [kubectl]
+
+- name: Show kubectl client version
+  ansible.builtin.command: kubectl version --client --output=yaml
+  register: kubectl_version
+  changed_when: false
+  tags: [kubectl]
+
+- name: Output kubectl version
+  ansible.builtin.debug:
+    msg: "{{ kubectl_version.stdout | default('') }}"
+  tags: [kubectl]
+
