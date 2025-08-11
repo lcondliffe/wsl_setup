@@ -136,3 +136,7 @@
     - name: Kubectl
       ansible.builtin.include_tasks: tasks/kubectl.yml
       tags: [kubectl, scripts, bootstrap]
+
+    - name: Helm
+      ansible.builtin.include_tasks: tasks/helm.yml
+      tags: [helm, scripts, bootstrap]
