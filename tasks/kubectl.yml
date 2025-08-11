@@ -53,6 +53,8 @@
 
 - name: Verify krew installation
   ansible.builtin.command: kubectl krew version
+  environment:
+    PATH: "{{ ansible_env.HOME }}/.krew/bin:{{ ansible_env.PATH }}"
   register: krew_version
   changed_when: false
   tags: [kubectl]

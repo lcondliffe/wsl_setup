@@ -13,7 +13,6 @@
     env_vars:
       SKIP: "terraform_checkov,end-of-file-fixer"
 
-    # Change this to update Terraform, then re-run with: ansible-playbook -K wsl-setup.yml -t terraform
     terraform_version: "1.9.5"
     terraform_os: "linux"
     terraform_arch_map:

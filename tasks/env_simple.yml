@@ -12,3 +12,19 @@
       export {{ k }}="{{ v }}"
       {% endfor %}
   tags: [env]
+
+- name: Ensure .zshrc contains exported env vars (and PATH updates)
+  ansible.builtin.blockinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    create: true
+    marker: "# {mark} ANSIBLE MANAGED BLOCK: Exported env vars"
+    block: |
+      # Managed by Ansible: exported env vars
+      {% for k, v in env_vars.items() %}
+      export {{ k }}="{{ v }}"
+      {% endfor %}
+      # If KREW_PATH is set, ensure it's on PATH
+      if [ -n "${KREW_PATH:-}" ]; then
+        export PATH="$KREW_PATH:$PATH"
+      fi
+  tags: [env, shell]
