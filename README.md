@@ -25,9 +25,9 @@ podman run --rm -v "$(pwd)":/work:Z -w /work docker.io/library/ubuntu:22.04 \
 podman run --rm -v "$(pwd)":/work:Z -w /work docker.io/library/ubuntu:24.04 \
   bash -lc './bootstrap_wsl.sh'
 
-# Pin a specific Ansible version
+# Install a specific Ansible version
 ANSIBLE_VERSION=9.5.1 podman run --rm -v "$(pwd)":/work:Z -w /work \
-  docker.io/library/ubuntu:22.04 \
+  docker.io/library/ubuntu:24.04 \
   bash -lc 'ANSIBLE_VERSION="$ANSIBLE_VERSION" ./bootstrap_wsl.sh'
 ```
 
