@@ -7,8 +7,8 @@
     - vars.yml
 
   variables:
-  run_bootstrap_scripts: false
-  ansible_python_interpreter: /usr/bin/python3
+    run_bootstrap_scripts: false
+    ansible_python_interpreter: /usr/bin/python3
 
   tasks:
     - name: Ensure base directories exist in HOME
