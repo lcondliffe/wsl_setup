@@ -1,0 +1,21 @@
+- name: Install / Upgrade tflint using bash script
+  ansible.builtin.shell: |
+    curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+  args:
+    executable: /bin/bash
+  changed_when: false
+  register: tflint_install
+  failed_when: tflint_install.rc not in [0]
+  tags: [tflint, scripts]
+
+- name: Show TFLint version
+  ansible.builtin.command: tflint --version
+  register: tflint_version
+  changed_when: false
+  failed_when: false
+  tags: [tflint, scripts]
+
+- name: Output TFLint version
+  ansible.builtin.debug:
+    msg: "{{ tflint_version.stdout_lines | default(['TFLint not found or not installed']) }}"
+  tags: [tflint, scripts]

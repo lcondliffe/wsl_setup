@@ -79,6 +79,10 @@
       ansible.builtin.include_tasks: tasks/terraform.yml
       tags: [terraform, scripts]
 
+    - name: TFLint
+      ansible.builtin.include_tasks: tasks/tflint.yml
+      tags: [tflint, scripts]
+
     - name: Infracost
       ansible.builtin.include_tasks: tasks/infracost.yml
       tags: [infracost, scripts]
