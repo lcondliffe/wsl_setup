@@ -51,20 +51,20 @@ pipx_packages:
 
 # shell aliases
 shell_aliases:
-  ap: "ansible-playbook"
-  cat-all: "for file in *; do echo -e '=== $file ==='; cat \"$file\"; done"
-  cls: "clear"
-  commit: "git add . && git commit --no-verify -m"
-  fabric-update: "cp -a ~/.config/custom-fabric-patterns/* ~/.config/fabric/patterns/"
-  gd: "git --no-pager diff"
-  git-delete-branches: 'git branch | grep -v "main" | xargs git branch -D'
-  gl: "git log"
-  gp: "git push"
-  gpl: "git pull"
-  gst: "git status"
-  ll: "ls -al"
-  passgen: "tr -dc 'A-Za-z0-9' </dev/urandom | head -c 16 ; echo"
-  pbcopy: "tee <&0 | clip.exe"
-  pbpaste: "powershell.exe Get-Clipboard | sed 's/\\r$//' | sed -z '$ s/\\n$//'"
-  pc: 'pre-commit run --all-files'
-  tfmt: "terraform fmt -recursive"
+  ap: ansible-playbook
+  cat-all: for file in *; do echo -e "\n=== $file ===\n"; cat "$file"; done
+  cls: clear
+  commit: git add . && git commit --no-verify -m
+  fabric-update: cp -a /.config/custom-fabric-patterns/* /.config/fabric/patterns/
+  gd: git --no-pager diff
+  git-delete-branches: git branch | grep -v "main" | xargs git branch -D
+  gl: git log
+  gp: git push
+  gpl: git pull
+  gst: git status
+  ll: ls -al
+  passgen: tr -dc 'A-Za-z0-9' </dev/urandom | head -c 16 ; echo
+  pbcopy: tee <&0 | clip.exe
+  pbpaste: powershell.exe Get-Clipboard | sed 's/\r$//' | sed -z '$ s/\n$//'
+  pc: pre-commit run --all-files
+  tfmt: terraform fmt -recursive

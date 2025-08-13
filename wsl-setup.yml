@@ -67,7 +67,7 @@
         marker: "# {mark} ANSIBLE MANAGED BLOCK: Custom Aliases"
         block: |
           {% for alias_name, alias_command in shell_aliases.items() %}
-          alias {{ alias_name }}="{{ alias_command }}"
+          alias {{ alias_name }}='{{ alias_command | replace("'", "'" ~ '"' ~ "'" ~ '"' ~ "'") }}'
           {% endfor %}
       tags: [aliases, shell]
 
