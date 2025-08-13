@@ -28,6 +28,7 @@ apt_packages:
   - eza # https://github.com/eza-community/eza
   - fzf # https://github.com/junegunn/fzf
   - git-delta # https://github.com/dandavison/delta
+  - golang-go
   - gpg
   - httpie # https://httpie.io/cli
   - jq

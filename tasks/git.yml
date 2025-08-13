@@ -1,0 +1,22 @@
+# -------------------------
+# Git Configuration
+# -------------------------
+- name: Configure git credential helper for WSL
+  ansible.builtin.git_config:
+    name: credential.helper
+    scope: global
+    value: "/mnt/c/Program\\ Files/Git/mingw64/bin/git-credential-manager.exe"
+  tags: [git]
+
+- name: Configure git credential useHttpPath
+  ansible.builtin.git_config:
+    name: credential.useHttpPath
+    scope: global
+    value: "true"
+  tags: [git]
+
+- name: Verify git credential configuration
+  ansible.builtin.command: git config --global --get-regexp credential
+  register: git_credential_config
+  changed_when: false
+  tags: [git]

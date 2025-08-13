@@ -71,6 +71,10 @@
           {% endfor %}
       tags: [aliases, shell]
 
+    - name: Git configuration
+      ansible.builtin.include_tasks: tasks/git.yml
+      tags: [git]
+
     - name: Terraform
       ansible.builtin.include_tasks: tasks/terraform.yml
       tags: [terraform, scripts]
