@@ -1,0 +1,75 @@
+---
+# Flip this via: -e run_bootstrap_scripts=true
+run_bootstrap_scripts: false
+ansible_python_interpreter: /usr/bin/python3
+
+# WSL System Environment Variables:
+env_vars:
+  SKIP: "terraform_checkov,end-of-file-fixer"
+
+terraform_version: "1.9.5"
+terraform_os: "linux"
+terraform_arch_map:
+  x86_64: amd64
+  aarch64: arm64
+  arm64: arm64
+  armv7l: arm
+terraform_tmp_dir: "/tmp/terraform-{{ terraform_version }}"
+
+# home directory structure
+directories:
+  - "{{ ansible_env.HOME }}/ansible"
+  - "{{ ansible_env.HOME }}/ansible/playbooks"
+  - "{{ ansible_env.HOME }}/ansible/roles"
+  - "{{ ansible_env.HOME }}/repo"
+  - "{{ ansible_env.HOME }}/repo/private"
+  - "{{ ansible_env.HOME }}/repo/public"
+  - "{{ ansible_env.HOME }}/repo/training"
+  - "{{ ansible_env.HOME }}/scripts"
+  - "{{ ansible_env.HOME }}/temp"
+
+# apt packages to install (can be overridden via -e or group_vars)
+apt_packages:
+  - azure-cli # (requires Microsoft repo)
+  - bat # https://github.com/sharkdp/bat
+  - buildah
+  - curl
+  - dnsutils
+  - eza # https://github.com/eza-community/eza
+  - fzf # https://github.com/junegunn/fzf
+  - git-delta # https://github.com/dandavison/delta
+  - gpg
+  - httpie # https://httpie.io/cli
+  - jq
+  - ncdu # https://github.com/rofl0r/ncdu
+  - podman
+  - pre-commit
+  - pipx
+  - python3
+  - python3-jmespath
+  - python3-venv
+  - traceroute
+  - unzip
+  - xsel
+  - yamllint
+  - zsh
+
+# shell aliases (can be overridden via -e or group_vars)
+shell_aliases:
+  ap: "ansible-playbook"
+  gst: "git status"
+  gd: "git --no-pager diff"
+  gp: "git push"
+  gpl: "git pull"
+  gl: "git log"
+  commit: "git add . && git commit --no-verify -m"
+  ll: "ls -al"
+  cls: "clear"
+  fabric-update: "cp -a ~/.config/custom-fabric-patterns/* ~/.config/fabric/patterns/"
+  tfmt: "terraform fmt -recursive"
+  pbpaste: "powershell.exe Get-Clipboard | sed 's/\\r$//' | sed -z '$ s/\\n$//'"
+  pbcopy: "tee <&0 | clip.exe"
+  passgen: "tr -dc 'A-Za-z0-9' </dev/urandom | head -c 16 ; echo"
+  git-delete-branches: 'git branch | grep -v "main" | xargs git branch -D'
+  cat-all: 'for file in *; do echo -e "\n=== $file ===\n"; cat "$file"; done'
+  pc: 'pre-commit run --all-files'

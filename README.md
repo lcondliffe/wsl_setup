@@ -1,16 +1,21 @@
 # WSL Terminal Setup
 
-Reproducible setup for a WSL (Ubuntu). The goal is to keep the machine as close to ephemeral as possible so rebuilds or distro upgrades are fast: re-run the playbook and you’re back in a working state.
+Reproducible setup for a WSL (Ubuntu). The goal is to keep the machine as close to ephemeral as possible so rebuilds or distro upgrades are fast: re-run the playbook and you're back in a working state.
 
-## Usage
+## Configuration
 
-First run which includes Ansible / Pre-Reqs:
+Default configuration is stored in `vars.yml` and includes:
+- Package lists (apt packages, shell aliases)
+- Directory structure
+- Tool versions (Terraform, etc.)
+- Environment variables
 
-```bash
-chmod +x ./bootstrap_wsl.sh`
+You can customize the setup by:
+1. Editing `vars.yml` directly
+2. Using a custom vars file: `ansible-playbook -K wsl-setup.yml -e @my-vars.yml`
+3. Overriding specific variables: `ansible-playbook -K wsl-setup.yml -e terraform_version=1.10.0`
 
-./bootstrap_wsl.sh
-```
+## Usage 
 
 `ansible-playbook -K wsl-setup.yml`
 
