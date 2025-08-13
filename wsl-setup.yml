@@ -40,6 +40,10 @@
         state: present
       tags: [apt]
 
+    - name: Install pipx packages
+      ansible.builtin.include_tasks: tasks/pipx.yml
+      tags: [pipx]
+
     - name: Ensure /etc/shells includes zsh
       become: true
       ansible.builtin.lineinfile:

@@ -43,6 +43,10 @@ apt_packages:
   - yamllint
   - zsh
 
+# pipx packages to install
+pipx_packages:
+  - jmespath
+
 # shell aliases
 shell_aliases:
   ap: "ansible-playbook"
