@@ -6,7 +6,7 @@
   vars_files:
     - vars.yml
 
-  variables:
+  vars:
     run_bootstrap_scripts: false
     ansible_python_interpreter: /usr/bin/python3
 
