@@ -1,8 +1,4 @@
 ---
-# Flip this via: -e run_bootstrap_scripts=true
-run_bootstrap_scripts: false
-ansible_python_interpreter: /usr/bin/python3
-
 # WSL System Environment Variables:
 env_vars:
   SKIP: "terraform_checkov,end-of-file-fixer"
