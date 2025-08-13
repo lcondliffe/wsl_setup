@@ -3,14 +3,7 @@
 env_vars:
   SKIP: "terraform_checkov,end-of-file-fixer"
 
-terraform_version: "1.9.5"
-terraform_os: "linux"
-terraform_arch_map:
-  x86_64: amd64
-  aarch64: arm64
-  arm64: arm64
-  armv7l: arm
-terraform_tmp_dir: "/tmp/terraform-{{ terraform_version }}"
+terraform_version: "1.12.2"
 
 # home directory structure
 directories:
