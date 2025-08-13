@@ -1,6 +1,3 @@
-# -------------------------
-# Git Configuration
-# -------------------------
 - name: Configure git credential helper for WSL
   ansible.builtin.git_config:
     name: credential.helper

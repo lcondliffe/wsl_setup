@@ -49,6 +49,13 @@ apt_packages:
 pipx_packages:
   - jmespath
 
+# vscode extensions to install
+vscode_extensions:
+  - YairHalberstadt.format-on-save    # Terraform Format on Save
+  - hashicorp.terraform               # HashiCorp Terraform
+  - eamodio.gitlens                   # GitLens
+  - ms-azure-devops.azure-pipelines   # Azure Pipelines
+
 # shell aliases
 shell_aliases:
   ap: ansible-playbook

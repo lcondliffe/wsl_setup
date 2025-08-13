@@ -94,3 +94,8 @@
     - name: Helm
       ansible.builtin.include_tasks: tasks/helm.yml
       tags: [helm, scripts]
+
+    - import_tasks: tasks/vscode_extensions.yml
+      tags:
+        - vscode
+        - development
