@@ -17,7 +17,7 @@ directories:
   - "{{ ansible_env.HOME }}/scripts"
   - "{{ ansible_env.HOME }}/temp"
 
-# apt packages to install (can be overridden via -e or group_vars)
+# apt packages to install
 apt_packages:
   - azure-cli # (requires Microsoft repo)
   - bat # https://github.com/sharkdp/bat
@@ -43,22 +43,22 @@ apt_packages:
   - yamllint
   - zsh
 
-# shell aliases (can be overridden via -e or group_vars)
+# shell aliases
 shell_aliases:
   ap: "ansible-playbook"
-  gst: "git status"
+  cat-all: 'for file in *; do echo -e "\n=== $file ===\n"; cat "$file"; done'
+  cls: "clear"
+  commit: "git add . && git commit --no-verify -m"
+  fabric-update: "cp -a ~/.config/custom-fabric-patterns/* ~/.config/fabric/patterns/"
   gd: "git --no-pager diff"
+  git-delete-branches: 'git branch | grep -v "main" | xargs git branch -D'
+  gl: "git log"
   gp: "git push"
   gpl: "git pull"
-  gl: "git log"
-  commit: "git add . && git commit --no-verify -m"
+  gst: "git status"
   ll: "ls -al"
-  cls: "clear"
-  fabric-update: "cp -a ~/.config/custom-fabric-patterns/* ~/.config/fabric/patterns/"
-  tfmt: "terraform fmt -recursive"
-  pbpaste: "powershell.exe Get-Clipboard | sed 's/\\r$//' | sed -z '$ s/\\n$//'"
-  pbcopy: "tee <&0 | clip.exe"
   passgen: "tr -dc 'A-Za-z0-9' </dev/urandom | head -c 16 ; echo"
-  git-delete-branches: 'git branch | grep -v "main" | xargs git branch -D'
-  cat-all: 'for file in *; do echo -e \"\\n=== $file ===\\n\"; cat \"$file\"; done'
+  pbcopy: "tee <&0 | clip.exe"
+  pbpaste: "powershell.exe Get-Clipboard | sed 's/\\r$//' | sed -z '$ s/\\n$//'"
   pc: 'pre-commit run --all-files'
+  tfmt: "terraform fmt -recursive"
