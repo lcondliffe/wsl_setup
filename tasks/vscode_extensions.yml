@@ -1,11 +1,27 @@
+- name: Check if VSCode is available
+  ansible.builtin.command: which code
+  register: vscode_available
+  failed_when: false
+  changed_when: false
+  tags: [vscode]
+
 - name: Get currently installed VSCode extensions
   ansible.builtin.command: code --list-extensions
   register: vscode_installed
   changed_when: false
+  when: vscode_available.rc == 0
   tags: [vscode]
 
 - name: Install required VSCode extensions
   ansible.builtin.command: "code --install-extension {{ item }}"
   loop: "{{ vscode_extensions }}"
-  when: item not in vscode_installed.stdout_lines
+  when: 
+    - vscode_available.rc == 0
+    - item not in vscode_installed.stdout_lines
+  tags: [vscode]
+
+- name: Skip VSCode extensions (VSCode not available)
+  ansible.builtin.debug:
+    msg: "Skipping VSCode extensions installation - VSCode not found"
+  when: vscode_available.rc != 0
   tags: [vscode]
