@@ -96,6 +96,4 @@
       tags: [helm, scripts]
 
     - import_tasks: tasks/vscode_extensions.yml
-      tags:
-        - vscode
-        - development
+      tags: [vscode]

@@ -51,10 +51,11 @@ pipx_packages:
 
 # vscode extensions to install
 vscode_extensions:
-  - YairHalberstadt.format-on-save    # Terraform Format on Save
+  - matheusq94.tfs                    # Terraform Format on Save
   - hashicorp.terraform               # HashiCorp Terraform
   - eamodio.gitlens                   # GitLens
   - ms-azure-devops.azure-pipelines   # Azure Pipelines
+  - ms-vscode.powershell              # PowerShell
 
 # shell aliases
 shell_aliases:
