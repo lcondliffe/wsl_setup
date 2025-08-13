@@ -2,6 +2,7 @@
 # WSL System Environment Variables:
 env_vars:
   SKIP: "terraform_checkov,end-of-file-fixer"
+  PATH: "$HOME/bin:/usr/local/bin:$HOME/.local/bin:$PATH"
 
 terraform_version: "1.12.2"
 
@@ -50,7 +51,7 @@ pipx_packages:
 # shell aliases
 shell_aliases:
   ap: "ansible-playbook"
-  cat-all: 'for file in *; do echo -e "\n=== $file ===\n"; cat "$file"; done'
+  cat-all: "for file in *; do echo -e '=== $file ==='; cat \"$file\"; done"
   cls: "clear"
   commit: "git add . && git commit --no-verify -m"
   fabric-update: "cp -a ~/.config/custom-fabric-patterns/* ~/.config/fabric/patterns/"
