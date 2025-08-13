@@ -60,5 +60,5 @@ shell_aliases:
   pbcopy: "tee <&0 | clip.exe"
   passgen: "tr -dc 'A-Za-z0-9' </dev/urandom | head -c 16 ; echo"
   git-delete-branches: 'git branch | grep -v "main" | xargs git branch -D'
-  cat-all: 'for file in *; do echo -e "\n=== $file ===\n"; cat "$file"; done'
+  cat-all: 'for file in *; do echo -e \"\\n=== $file ===\\n\"; cat \"$file\"; done'
   pc: 'pre-commit run --all-files'
