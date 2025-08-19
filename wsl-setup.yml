@@ -33,6 +33,20 @@
         update_cache: true
       tags: [apt]
 
+    - name: Wait for apt/dpkg locks to be released
+      become: true
+      ansible.builtin.shell: |
+        if fuser /var/lib/dpkg/lock-frontend /var/lib/dpkg/lock /var/lib/apt/lists/lock >/dev/null 2>&1; then
+          exit 1
+        fi
+        exit 0
+      register: apt_locks
+      retries: 60
+      delay: 5
+      until: apt_locks.rc == 0
+      changed_when: false
+      tags: [apt]
+
     - name: Install apt packages
       become: true
       ansible.builtin.apt:

@@ -31,6 +31,7 @@ apt_packages:
   - golang-go
   - gpg
   - httpie # https://httpie.io/cli
+  - ipcalc
   - jq
   - ncdu # https://github.com/rofl0r/ncdu
   - podman
