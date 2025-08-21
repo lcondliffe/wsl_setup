@@ -34,6 +34,7 @@ apt_packages:
   - ipcalc
   - jq
   - ncdu # https://github.com/rofl0r/ncdu
+  - nodejs
   - podman
   - pre-commit
   - pipx
@@ -44,6 +45,7 @@ apt_packages:
   - unzip
   - xsel
   - yamllint
+  - zoxide
   - zsh
 
 # pipx packages to install
