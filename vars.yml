@@ -43,6 +43,7 @@ apt_packages:
   - python3-venv
   - traceroute
   - unzip
+  - whois
   - xsel
   - yamllint
   - zoxide
