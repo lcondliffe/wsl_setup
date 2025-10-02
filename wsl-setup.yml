@@ -109,5 +109,9 @@
       ansible.builtin.include_tasks: tasks/helm.yml
       tags: [helm, scripts]
 
+    - name: Azure Quick Review (azqr)
+      ansible.builtin.include_tasks: tasks/azqr.yml
+      tags: [azqr, scripts]
+
     - import_tasks: tasks/vscode_extensions.yml
       tags: [vscode]

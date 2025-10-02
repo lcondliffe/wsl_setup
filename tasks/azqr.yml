@@ -1,0 +1,84 @@
+---
+# Install Azure Quick Review (azqr) CLI
+# Uses GitHub API to fetch latest release tag and downloads the appropriate linux binary zip
+# Tags: azqr, scripts
+
+- name: Determine azqr arch
+  ansible.builtin.set_fact:
+    azqr_arch: >-
+      {% if ansible_architecture == 'x86_64' %}amd64{% elif ansible_architecture in ['aarch64','arm64'] %}arm64{% else %}amd64{% endif %}
+  tags: [azqr]
+
+- name: Query latest azqr release metadata
+  ansible.builtin.uri:
+    url: https://api.github.com/repos/Azure/azqr/releases/latest
+    return_content: true
+    headers:
+      Accept: application/vnd.github+json
+      User-Agent: ansible-azqr-installer
+  register: azqr_release
+  tags: [azqr]
+
+- name: Extract azqr latest tag
+  ansible.builtin.set_fact:
+    azqr_tag: "{{ (azqr_release.content | from_json).tag_name }}"
+  when: azqr_release is succeeded
+  tags: [azqr]
+
+- name: Fail if azqr tag not found
+  ansible.builtin.fail:
+    msg: "Unable to determine latest azqr release tag from GitHub API response"
+  when: azqr_tag is not defined or azqr_tag | length == 0
+  tags: [azqr]
+
+- name: Create temp dir for azqr
+  ansible.builtin.file:
+    path: "/tmp/azqr-{{ azqr_tag }}"
+    state: directory
+    mode: '0755'
+  tags: [azqr]
+
+- name: Download azqr zip
+  ansible.builtin.get_url:
+    url: "https://github.com/Azure/azqr/releases/download/{{ azqr_tag }}/azqr-linux-{{ azqr_arch }}.zip"
+    dest: "/tmp/azqr-{{ azqr_tag }}/azqr-linux-{{ azqr_arch }}.zip"
+    mode: '0644'
+  tags: [azqr]
+
+- name: Extract azqr binary (flatten)
+  ansible.builtin.shell: |
+    set -euo pipefail
+    unzip -j -qq "/tmp/azqr-{{ azqr_tag }}/azqr-linux-{{ azqr_arch }}.zip" -d "/tmp/azqr-{{ azqr_tag }}"
+  args:
+    executable: /bin/bash
+    creates: "/tmp/azqr-{{ azqr_tag }}/azqr"
+  register: azqr_unzip
+  changed_when: azqr_unzip.rc == 0 and azqr_unzip.stdout is not search('skipping')
+  tags: [azqr]
+
+- name: Install azqr to /usr/local/bin
+  become: true
+  ansible.builtin.copy:
+    src: "/tmp/azqr-{{ azqr_tag }}/azqr"
+    dest: /usr/local/bin/azqr
+    owner: root
+    group: root
+    mode: '0755'
+  tags: [azqr]
+
+- name: Clean up azqr temp dir
+  ansible.builtin.file:
+    path: "/tmp/azqr-{{ azqr_tag }}"
+    state: absent
+  tags: [azqr]
+
+- name: Show azqr version
+  ansible.builtin.command: azqr --version
+  register: azqr_version
+  changed_when: false
+  tags: [azqr]
+
+- name: Output azqr version
+  ansible.builtin.debug:
+    msg: "{{ azqr_version.stdout | default('') }}"
+  tags: [azqr]
